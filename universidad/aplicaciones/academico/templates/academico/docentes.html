@@ -1,0 +1,99 @@
+{% extends "academico/gestioncursos.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="display-6 mb-0">Panel de Docentes</h2>
+                <a href="{% url 'gestion_cursos' %}" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Volver a Cursos
+                </a>
+</div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form action="{% url 'creardocente' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="form-group py-2">
+                            <input type="text" name="txtnombre" class="form-control" placeholder="Nombre" required>
+                        </div>
+
+                        <div class="form-group py-2">
+                            <input type="text" name="txtapellido" class="form-control" placeholder="Apellido" required>
+                        </div>
+
+                        <div class="form-group py-2">
+                            <input type="number" name="txtdni" class="form-control" placeholder="DNI" required>
+                        </div>
+
+                        <div class="form-group py-2">
+                            <select name="txtsexo" class="form-control" required>
+                                <option value="" selected disabled>Seleccione Sexo</option>
+                                <option value="F">Femenino</option>
+                                <option value="M">Masculino</option>
+                                <option value="O">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group py-2">
+                            <button type="submit" class="btn btn-success w-100 text-white">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Docente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h2 class="display-6">Panel de Docentes</h2>
+            <div class="table-responsive card shadow-sm">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Apellido y Nombre</th>
+                            <th>DNI</th>
+                            <th class="text-center">Sexo</th>
+                            <th class="text-center">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in docentes %}
+                        <tr>
+                            <td class="fw-bold">{{ d.apellido }}, {{ d.nombre }}</td>
+                            <td>{{ d.dni }}</td>
+                            <td class="text-center">
+                                {% if d.sexo == 'M' %}
+                                    <span class="badge rounded-pill bg-info text-dark">Masculino</span>
+                                {% elif d.sexo == 'F' %}
+                                    <span class="badge rounded-pill bg-danger">Femenino</span>
+                                {% else %}
+                                    <span class="badge rounded-pill bg-secondary">Otro</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'docenteedicion' d.id %}" class="btn btn-outline-warning btn-sm">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="{% url 'eliminardocente' d.id %}" class="btn btn-outline-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                No hay docentes registrados todavía.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

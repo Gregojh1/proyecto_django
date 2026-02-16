@@ -1,0 +1,19 @@
+/* 1. Definir la clase específica */
+
+.playwrite-nz-basic{
+  font-family: "Playwrite NZ Basic", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* 2. Aplicar a toda la página (Corregido y con prioridad) */
+body {
+  /* Añadimos la 'i' que faltaba y !important para asegurar el cambio */
+  font-family: "Playwrite NZ Basic", system-ui !important;
+}
+
+body {
+    background-color: beige !important;
+}

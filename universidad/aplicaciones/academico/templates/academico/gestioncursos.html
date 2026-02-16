@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cursos</title>
+     {#importacion de bustrad#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    {#importar ccs #}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/gestioncursos.css'%}">
+    {# google fonts #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&family=Playwrite+NZ+Basic&family=Rubik+Gemstones&display=swap" rel="stylesheet">
+    {#font awasame #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">ACADÉMICO</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'gestion_cursos' %}">Cursos</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'listdocentes' %}" style="color: #0dcaf0; font-weight: bold;">
+                <i class="fa-solid fa-user-tie"></i> Panel Docente
+            </a>
+        </li>
+        </ul>
+</div>
+        </div>
+    </nav>
+    {% block content %}
+    
+    <div class="container py-4">
+        
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <h2>Gestión de Curso</h2>
+                <div class="card">
+                    <div class="card-body">
+                      <form action="{% url 'registrocurso' %}" method="POST">
+                       {% csrf_token %}
+
+                       <input type="hidden" name="txtid" value="{{curso.id|default:''}}">
+    
+                       <div class="form-group py-2">
+                            <input type="text" name="txtnombre" value="{{curso.nombre|default:''}}" class="form-control" placeholder="Nombre" required>
+                       </div>
+    
+                       <div class="form-group py-2">    
+                           <input type="number" name="numcreditos" value="{{curso.creditos|default:''}}" class="form-control" min="1" placeholder="Créditos" required>
+                        </div>
+
+                       <div class="form-group py-2">
+                            <button type="submit" class="btn btn-success w-100 text-white"> <i class="fa-solid fa-floppy-disk"></i> Guardar Curso</button>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                <h2>Lista de cursos disponibles</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Créditos</th>
+                                <th colspan="2">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in cursos %}
+                            <tr> 
+                                <td>{{c.nombre}}</td>
+                                <td>{{c.creditos}}</td>
+                                <td><a href="{% url 'registroedicion' c.id%}" class="btn btn-info btn-stringformat"><i class="fa-solid fa-square-pen"></i> Editar</a></td>
+                                <td><a href="{% url 'eliminacioncurso' c.id %}" class="btn btn-danger btn-eliminar"><i class="fa-solid fa-trash"></i> Eliminar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    {% endblock %}
+    <script>
+    (function () {
+        const btnEliminacion = document.querySelectorAll(".btn-eliminar");
+
+        btnEliminacion.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const confirmacion = confirm('¿Estás seguro de eliminar el curso?');
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            });
+        });
+    })();
+</script>
+</body>
+</html>
